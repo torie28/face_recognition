@@ -39,7 +39,7 @@ class CameraFaceRecognizer:
         self.camera_height = 480
         
         # Recognition settings
-        self.confidence_threshold = 80  # Lower = more strict
+        self.confidence_threshold = 100  # Lower = more strict, increased for better recognition
         self.recognition_delay = 0.1  # Delay between recognitions (seconds)
         self.last_recognition_time = 0
         

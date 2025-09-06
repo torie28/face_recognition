@@ -86,9 +86,24 @@ class OpenCVFaceRecognizer:
                         
                         # Extract face region
                         face_roi = gray[y:y+h, x:x+w]
-                        
-                        # Resize to standard size
                         face_roi = cv2.resize(face_roi, (100, 100))
+                        
+                        if hasattr(self, 'face_recognizer') and self.face_recognizer:
+                            try:
+                                label, opencv_confidence = self.face_recognizer.predict(face_roi)
+                                # Convert OpenCV confidence (lower is better) to similarity score
+                                if opencv_confidence < 100:  # Threshold for recognition
+                                    name = list(self.label_to_name.values())[0] if self.label_to_name else "Unknown"  # Use first known person
+                                    confidence = max(0, (100 - opencv_confidence) / 100)
+                                else:
+                                    name = "Unknown"
+                                    confidence = 0.0
+                            except:
+                                name = "Unknown"
+                                confidence = 0.0
+                        else:
+                            name = "Unknown"
+                            confidence = 0.0
                         
                         faces.append(face_roi)
                         labels.append(label_counter)
