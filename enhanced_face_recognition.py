@@ -118,14 +118,14 @@ class EnhancedFaceRecognizer:
                 # Load image
                 image = cv2.imread(str(image_path))
                 if image is None:
-                    print(f"  ❌ Could not load image")
+                    print(f"   Could not load image")
                     continue
                 
                 # Enhanced face detection
                 faces, gray = self.detect_faces_enhanced(image)
                 
                 if len(faces) == 0:
-                    print(f"  ❌ No faces detected")
+                    print(f"   No faces detected")
                     continue
                 
                 # Extract person name
@@ -148,7 +148,7 @@ class EnhancedFaceRecognizer:
                 print(f"  ✓ Processed face: {w}x{h} → 100x100 (enhanced)")
                 
             except Exception as e:
-                print(f"  ❌ Error processing {image_path.name}: {str(e)}")
+                print(f"   Error processing {image_path.name}: {str(e)}")
         
         # Prepare training data
         all_faces = []
@@ -157,7 +157,7 @@ class EnhancedFaceRecognizer:
         
         for person_id, (person_name, faces) in enumerate(person_faces.items()):
             person_names.append(person_name)
-            print(f"\n👤 {person_name}: {len(faces)} face samples")
+            print(f"\n {person_name}: {len(faces)} face samples")
             
             for face in faces:
                 all_faces.append(face)
@@ -170,16 +170,16 @@ class EnhancedFaceRecognizer:
         faces, labels, person_names = self.load_and_group_faces()
         
         if len(faces) == 0:
-            print("❌ No faces to train with.")
+            print("No faces to train with.")
             return False
         
-        print(f"\n🎯 Training enhanced recognizer...")
+        print(f"\n Training enhanced recognizer...")
         self.face_recognizer.train(faces, np.array(labels))
         self.person_names = person_names
         self.is_trained = True
         
         self.save_model()
-        print("✅ Enhanced training completed!")
+        print("Enhanced training completed!")
         return True
     
     def save_model(self):
@@ -193,9 +193,9 @@ class EnhancedFaceRecognizer:
                     'is_trained': self.is_trained
                 }, f)
             
-            print(f"💾 Enhanced model saved")
+            print(f"Enhanced model saved")
         except Exception as e:
-            print(f"❌ Error saving model: {str(e)}")
+            print(f"Error saving model: {str(e)}")
     
     def load_model(self):
         """Load existing enhanced model."""
@@ -208,7 +208,7 @@ class EnhancedFaceRecognizer:
                     self.person_names = data['person_names']
                     self.is_trained = data['is_trained']
                 
-                print(f"✅ Loaded enhanced model with {len(self.person_names)} people:")
+                print(f"Loaded enhanced model with {len(self.person_names)} people:")
                 for name in self.person_names:
                     print(f"  - {name}")
                 return True
@@ -320,13 +320,13 @@ class EnhancedFaceRecognizer:
         """Run enhanced camera recognition."""
         cap = cv2.VideoCapture(0)
         if not cap.isOpened():
-            print("❌ Could not open camera")
+            print("Could not open camera")
             return
         
         print("\n" + "="*60)
-        print("🚀 ENHANCED FACE RECOGNITION CAMERA")
+        print("ENHANCED FACE RECOGNITION CAMERA")
         print("="*60)
-        print("✨ Features:")
+        print("Features:")
         print("  - Robust to clothing/lighting changes")
         print("  - Focus on facial features only")
         print("  - Enhanced preprocessing")
@@ -358,12 +358,8 @@ class EnhancedFaceRecognizer:
                 key = cv2.waitKey(1) & 0xFF
                 if key == ord('q'):
                     break
-                elif key == ord('s'):
-                    timestamp = time.strftime("%Y%m%d_%H%M%S")
-                    cv2.imwrite(f"enhanced_screenshot_{timestamp}.jpg", frame)
-                    print(f"📸 Screenshot saved: enhanced_screenshot_{timestamp}.jpg")
                 elif key == ord('r'):
-                    print("🔄 Retraining enhanced model...")
+                    print("Retraining enhanced model...")
                     self.train_recognizer()
                     
         except KeyboardInterrupt:
